@@ -1,0 +1,5 @@
+{
+    "directory": "front/app/vendors/",
+    "analytics": false,
+    "timeout": 120000
+}

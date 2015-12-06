@@ -1,0 +1,30 @@
+php_value session.cookie_domain .connex-front.loc
+
+# IndexIgnore */*
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+   #RewriteCond %{REQUEST_URI} ^/(user|company)/id\d+$
+    #RewriteCond %{HTTP_COOKIE} !loggedIn
+    #RewriteRule (user|company)/id(\d+)$ http://backend.connex-front.loc/innerApi/redirectToPublicProfile/$1/$2 [P,L]
+
+    ### SiteMap redirect
+    RewriteCond %{REQUEST_URI} ^/sitemap\.xml$
+    RewriteRule .* http://backend.connex-front.loc/sitemap.xml [P,L]
+
+    ### Prerender.io redirect
+    RewriteCond %{HTTP_USER_AGENT} baiduspider|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora\ link\ preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator [NC,OR]
+    RewriteCond %{QUERY_STRING} _escaped_fragment_
+    RewriteCond %{REQUEST_URI} ^/index\.(html|php)$
+    RewriteRule .* http://127.0.0.1:3000/ [P,L]
+
+    RewriteCond %{HTTP_USER_AGENT} baiduspider|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora\ link\ preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator [NC,OR]
+    RewriteCond %{QUERY_STRING} _escaped_fragment_
+    RewriteRule ^(?!.*?(\.js|\.css|\.xml|\.less|\.png|\.jpg|\.jpeg|\.gif|\.pdf|\.doc|\.txt|\.ico|\.rss|\.zip|\.mp3|\.rar|\.exe|\.wmv|\.doc|\.avi|\.ppt|\.mpg|\.mpeg|\.tif|\.wav|\.mov|\.psd|\.ai|\.xls|\.mp4|\.m4a|\.swf|\.dat|\.dmg|\.iso|\.flv|\.m4v|\.torrent))(.*) http://127.0.0.1:3000/http://backend.connex-front.loc/$2 [P,L]
+
+    ### Redirect all other requests to index.html page if not file or dir
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !(jpg|png|gif|js|map|html|htm)$
+    RewriteRule ^(.*)$ index.html [QSA,L]
+</IfModule>
